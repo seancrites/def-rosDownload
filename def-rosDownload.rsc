@@ -8,9 +8,8 @@
 # Dependencies: Outbound HTTPS access to download.mikrotik.com (port 443)
 #               RouterOS v7.1+ (global functions, modern /tool fetch)
 # Usage:
-#   - Add as script: /system script add name="def-rosDownload" source="[paste]"
-#     or
-#     Import from file: /system script import file-name=def-rcsDownload.rsc
+#   - Add as script: /system script add name=def-rosDownload \
+#        source=[:file get def-rosDownload.rsc contents]
 #   - Register once: /system script run def-rosDownload
 #   - For automatic loading on boot/reboot:
 #        /system scheduler add name="load-rosDownload" interval=0 \
@@ -21,15 +20,12 @@
 #        $rosDownload 7.20.1
 #        $rosDownload 6.49.10   (for supported downgrade paths)
 #   - No argument: Displays usage error
-#   - After success: Follow contextual next-steps printed (upgrade vs downgrade)
+#
 # Description:
 #   Defines global function 'rosDownload' to stage a specific RouterOS version.
+#
 #   Downloads main RouterOS package + all currently enabled extra packages
 #   (e.g., ups, lora, etc) individually as local .npk files.
-#
-#   Provides contextual next-steps:
-#   /system reboot - for upgrades
-#   /system package downgrade - for downgrades
 #
 # https://github.com/seancrits/upgraded-doodle
 # =============================================================================
