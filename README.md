@@ -15,66 +15,40 @@ Ideal for controlled upgrades/downgrades to specific versions, not just latest. 
 - RouterOS v7.1+ (tested on v7.18.x, v7.19.x and v7.20.x stable as of December 2025)
 - Outbound HTTPS access to download.mikrotik.com (port 443)
 
-## Quick Start
+## Super Quick Start
 
-1. Download `def-rosDownload.rsc` from this repo.
-2. Upload to router (e.g., via WinBox Files or SCP).
-3. Import and register:
+1. Fetch def-rosDownload.rsc from GitHub
 
    ```console
-   /import file-name=def-rosDownload.rsc
+   /tool fetch url="https://raw.githubusercontent.com/seancrites/def-rosDownload/refs/heads/master/def-rosDownload.rsc" mode=https dst-path="def-rosDownload.rsc" output=file
+   ```
+
+2. Load the file as a script
+
+   ```console
+   /system script add name=def-rosDownload source=[:file get def-rosDownload.rsc contents]
+   ```
+
+3. Run to load global function
+
+   ```console
    /system script run def-rosDownload
    ```
 
-4. Make persistent on boot:
+4. Verify Registration
+
+   ```console
+   /system script environment print where name=rosDownload
+   ```
+
+5. Make persistent on boot:
 
    ```console
    /system scheduler add name="load-rosDownload" interval=0 \
       on-event="/system script run def-rosDownload" start-time=startup
    ```
 
-5. Use:
-
-   ```console
-   $rosDownload 7.19.4
-   ```
-
-## Detailed Deployment Steps
-
-### 1. Transfer the Script to the Router
-
-- **Via WinBox**: Drag-and-drop `def-rosDownload.rsc` into Files tab.
-- **Via SCP** (from Linux/macOS):
-
-  ```console
-  scp def-rosDownload.rsc admin@router-ip:
-  ```
-
-- **Via WebFig**: Files → Upload.
-
-### 2. Import and Register the Global Function
-
-```console
-   /import file-name=def-rosDownload.rsc
-   /system script run def-rosDownload
-```
-
-### 3. Verify Registration
-
-```console
-   /system script environment print where name=rosDownload
-```
-
-Should show the global function loaded.
-
-### 4. Make Persistent Across Reboots
-
-```console
-/system scheduler add name="load-rosDownload" interval=0 \
-   on-event="/system script run def-rosDownload" start-time=startup comment="Load rosDownload function"
-```
-
-### 5. Usage Examples
+6. Use:
 
 - Upgrade:
 
@@ -94,7 +68,50 @@ Should show the global function loaded.
   $rosDownload 6.49.10
   ```
 
-After successful staging:
+## Quick Start
+
+1. Download `def-rosDownload.rsc` from this repo.
+2. Open WinBox/WebFig, create a new script "def-rosDownload" and paste the contents.
+3. Run to load global function:
+
+   ```console
+   /system script run def-rosDownload
+   ```
+
+4. Verify registration:
+
+   ```console
+   /system script environment print where name=rosDownload
+   ```
+
+5. Make function persistent on boot:
+
+   ```console
+   /system scheduler add name="load-rosDownload" interval=0 \
+      on-event="/system script run def-rosDownload" start-time=startup
+   ```
+
+6. Use:
+
+- Upgrade:
+
+  ```console
+  $rosDownload 7.20.1
+  ```
+
+- Downgrade:
+
+  ```console
+  $rosDownload 7.18.1
+  ```
+
+- LTS downgrade:
+
+  ```console
+  $rosDownload 6.49.10
+  ```
+
+## After successful staging
 
 - Upgrade: `/system reboot`
 - Downgrade: `/system package downgrade` (confirm prompt → auto-reboot)
