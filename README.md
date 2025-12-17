@@ -15,7 +15,7 @@ Ideal for controlled upgrades/downgrades to specific versions, not just latest. 
 - RouterOS v7.1+ (tested on v7.18.x, v7.19.x and v7.20.x stable as of December 2025)
 - Outbound HTTPS access to download.mikrotik.com (port 443)
 
-## Super Quick Start
+## Quick Start
 
 1. Fetch def-rosDownload.rsc from GitHub
 
@@ -29,62 +29,19 @@ Ideal for controlled upgrades/downgrades to specific versions, not just latest. 
    /system script add name=def-rosDownload source=[:file get def-rosDownload.rsc contents]
    ```
 
-3. Run to load global function
+3. Run script to load global function
 
    ```console
    /system script run def-rosDownload
    ```
 
-4. Verify Registration
+4. Verify function registration
 
    ```console
    /system script environment print where name=rosDownload
    ```
 
 5. Make persistent on boot:
-
-   ```console
-   /system scheduler add name="load-rosDownload" interval=0 \
-      on-event="/system script run def-rosDownload" start-time=startup
-   ```
-
-6. Use:
-
-- Upgrade:
-
-  ```console
-  $rosDownload 7.20.1
-  ```
-
-- Downgrade:
-
-  ```console
-  $rosDownload 7.18.1
-  ```
-
-- LTS downgrade:
-
-  ```console
-  $rosDownload 6.49.10
-  ```
-
-## Quick Start
-
-1. Download `def-rosDownload.rsc` from this repo.
-2. Open WinBox/WebFig, create a new script "def-rosDownload" and paste the contents.
-3. Run to load global function:
-
-   ```console
-   /system script run def-rosDownload
-   ```
-
-4. Verify registration:
-
-   ```console
-   /system script environment print where name=rosDownload
-   ```
-
-5. Make function persistent on boot:
 
    ```console
    /system scheduler add name="load-rosDownload" interval=0 \
