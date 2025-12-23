@@ -3,31 +3,34 @@
 # -----------------------------------------------------------------------------
 # Author: Sean Crites
 # Created: 2025-12-13
-# Updated: 2025-12-16
-# Version: 2.7
+# Updated: 2025-12-23
+# Version: 2.9
 # Dependencies: Outbound HTTPS access to download.mikrotik.com (port 443)
-#               RouterOS v7.1+ (global functions, modern /tool fetch)
+#               RouterOS >= v7.14.3
 # Usage:
-#   - Add as script: /system script add name=def-rosDownload \
-#        source=[:file get def-rosDownload.rsc contents]
-#   - Register once: /system script run def-rosDownload
-#   - For automatic loading on boot/reboot:
-#        /system scheduler add name="load-rosDownload" interval=0 \
-#             on-event="/system script run def-rosDownload" start-time=startup
-#   - Verify function: /system script environment print where name=rosDownload
-#   - Examples:
-#        $rosDownload 7.19.4
-#        $rosDownload 7.20.1
-#        $rosDownload 6.49.10   (for supported downgrade paths)
-#   - No argument: Displays usage error
+#
+#  - Add Script:
+#    /tool fetch url="https://raw.githubusercontent.com/seancrites/def-rosDownload/refs/heads/master/def-rosDownload.rsc" mode=https dst-path="def-rosDownload.rsc" output=file
+#  - Load script:
+#    /system script add name=def-rosDownload source=[:file get def-rosDownload.rsc contents]
+#  - Run script:
+#    /system script run def-rosDownload
+#  - Verify script:
+#    /system script environment print where name=rosDownload
+#  - Make script persistent:
+#    /system scheduler add name="load-rosDownload" interval=0 on-event="/system script run def-rosDownload" start-time=startup
+#  - Use script as a function:
+#    $rosDownload 7.19.4
+#    $rosDownload 7.20.1
+#    $rosDownload 6.49.10   (for supported downgrade paths)
 #
 # Description:
-#   Defines global function 'rosDownload' to stage a specific RouterOS version.
 #
+#   Defines global function 'rosDownload' to stage a specific RouterOS version.
 #   Downloads main RouterOS package + all currently enabled extra packages
 #   (e.g., ups, lora, etc) individually as local .npk files.
 #
-# https://github.com/seancrits/upgraded-doodle
+# https://github.com/seancrites/def-rosDownload
 # =============================================================================
 
 :global rosDownload do={
