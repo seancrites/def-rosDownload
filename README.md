@@ -12,7 +12,7 @@ Ideal for controlled upgrades/downgrades to specific versions, not just latest. 
 
 ## Requirements
 
-- RouterOS v7.1+ (tested on v7.18.x, v7.19.x and v7.20.x stable as of December 2025)
+- RouterOS >= v7.14.3
 - Outbound HTTPS access to download.mikrotik.com (port 443)
 
 ## Quick Start
